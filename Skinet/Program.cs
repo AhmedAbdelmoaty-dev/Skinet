@@ -1,4 +1,5 @@
 using Application.Extensions;
+using Infrastructure.Data.SeedData;
 using Infrastructure.Extensions;
 using Skinet.Middlewares;
 
@@ -6,25 +7,25 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
-builder.Services.AddOpenApi();
+builder.Services.AddCors();
 
 builder.Services.AddApplication();
 
 builder.Services.AddInfrastructure(builder.Configuration);
 
-var app = builder.Build();
-app.UseMiddleware<ErrorHandelingMiddleware>();
+builder.Services.AddScoped<ErrorHandelingMiddleware>();
 
+var app = builder.Build();
+var scope =app.Services.CreateScope();
+var seeder = scope.ServiceProvider.GetRequiredService<IProductSeeder>();
+await seeder.SeedDataAsync();
+app.UseMiddleware<ErrorHandelingMiddleware>();
+app.UseCors(x=>x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200","https://localhost:4200"));
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(c=>{
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-        c.RoutePrefix = "";
-        }
-    );
-    app.MapOpenApi();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();

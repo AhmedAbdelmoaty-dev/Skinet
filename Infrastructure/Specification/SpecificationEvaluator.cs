@@ -19,6 +19,10 @@ namespace Infrastructure.Specification
             {
                 inputQuery = inputQuery.OrderByDescending(spec.OrderByDescending);
             }
+            if(spec.isPagingEnabled)
+            {
+                inputQuery = inputQuery.Skip(spec.skip).Take(spec.take);
+            }
             return inputQuery;
         }
     }

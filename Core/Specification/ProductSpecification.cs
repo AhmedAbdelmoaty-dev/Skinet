@@ -4,11 +4,14 @@ namespace Application.Specification
 {
     public class ProductSpecification: BaseSpecification<Product>
     {
-        public ProductSpecification(string? brand,string? type,string? sort):base((p=>
-        (string.IsNullOrEmpty(brand) || p.Brand == brand) &&
-         (string.IsNullOrEmpty(type) || p.Type == type) ))
+        public ProductSpecification(ProductSpecParams specParams):base(p=>
+            (string.IsNullOrEmpty(specParams.Search)|| p.Name.ToLower().Contains(specParams.Search))&&
+            (specParams.Types.Count==0||specParams.Types.Contains(p.Type))&&
+            (specParams.Brands.Count==0||specParams.Brands.Contains(p.Brand)))
+        
         {
-            switch (sort)
+            ApplyPaging(specParams.PageSize * (specParams.PageIndex - 1), specParams.PageSize);
+            switch (specParams.sort)
             {
                 case "priceAsc":
                     AddOrderByAsc(p => p.Price);
@@ -19,6 +22,8 @@ namespace Application.Specification
                 default:
                     AddOrderByAsc(p => p.Price);
                     break;
+
+                    
             }
         }
     }

@@ -18,8 +18,9 @@ namespace Skinet.Middlewares
             }
             catch (Exception ex)
             {
+                
                 context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-                await context.Response.WriteAsync("Something went wrong ...");
+                await context.Response.WriteAsync($"Something went wrong ... , {ex.Message}");
             }
         }
     }

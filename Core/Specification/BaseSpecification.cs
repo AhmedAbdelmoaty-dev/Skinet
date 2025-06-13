@@ -1,11 +1,7 @@
 ﻿using Application.Contracts.Specifications;
 using Domain.Entites;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Application.Specification
 {
@@ -14,6 +10,13 @@ namespace Application.Specification
         public Expression<Func<T, bool>> Criteria { get; private set; }
         public Expression<Func<T, object>>? OrderBy { get; private set; }
         public Expression<Func<T, object>>? OrderByDescending { get; private set; }
+
+        public int skip { get; private set; }
+
+        public int take { get; private set; }
+
+        public bool isPagingEnabled { get; private set; }
+
         public BaseSpecification(Expression<Func<T,bool>>criteria)
         {
             Criteria = criteria;
@@ -26,6 +29,21 @@ namespace Application.Specification
         protected void AddOrderByDesc(Expression<Func<T, object>> orderByDescending)
         {
             OrderByDescending = orderByDescending;
+        }
+        protected void ApplyPaging(int skip, int take)
+        {
+            this.skip = skip;
+            this.take = take;
+            isPagingEnabled = true;
+        }
+
+        public IQueryable<T> ApplyCriteria(IQueryable<T> query)
+        {
+            if (Criteria != null)
+            {
+                query=query.Where(Criteria);
+            }
+            return query;   
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Application.Contracts.Repositories;
 using Infrastructure.Data;
+using Infrastructure.Data.SeedData;
+using Infrastructure.Data.Seeders;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -12,7 +14,10 @@ namespace Infrastructure.Extensions
         public static void AddInfrastructure(this IServiceCollection services,IConfiguration configuration)
         {
             services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+            
             services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
+            
+            services.AddScoped<IProductSeeder, ProductSeeder>();
         }
     }
 }

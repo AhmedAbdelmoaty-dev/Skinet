@@ -3,7 +3,7 @@ using System.Net;
 
 namespace Application.Products.Commands.CreateProduct
 {
-    internal class CreateProductCommand:IRequest<int>
+    public class CreateProductCommand:IRequest<int>
     {
         public string Name { get; set; }
         public string Description { get; set; }

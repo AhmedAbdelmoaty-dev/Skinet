@@ -14,6 +14,7 @@ namespace Application.Contracts.Repositories
         void Delete(T entity);
         Task<int> SaveChangesAsync();
         bool Exists(int id);
+        Task<int>CountAsync(ISpecefication<T> spec);
     }
    
 }

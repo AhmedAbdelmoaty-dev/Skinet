@@ -4,10 +4,11 @@ using Application.Specification;
 using AutoMapper;
 using Domain.Entites;
 using MediatR;
+using Skinet.RequestHelpers;
 
 namespace Application.Products.Query.GetAllProducts
 {
-    internal class GetAllProductsHandler : IRequestHandler<GetAllProductsQuery, IReadOnlyList<ProductDto>>
+    internal class GetAllProductsHandler : IRequestHandler<GetAllProductsQuery, Pagination<ProductDto>>
     {
         private readonly IGenericRepository<Product> _repository;
         private readonly IMapper _mapper;
@@ -16,17 +17,25 @@ namespace Application.Products.Query.GetAllProducts
             _mapper = mapper;
             _repository = repository;
         }
-        public async Task<IReadOnlyList<ProductDto>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
+        public async Task<Pagination<ProductDto>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
         {
-            IReadOnlyList<Product> products;
-            if (!string.IsNullOrEmpty(request.Brand) || !string.IsNullOrEmpty(request.Type) || !string.IsNullOrEmpty(request.Sort))
-            {
-                var spec =new ProductSpecification(request.Brand, request.Type, request.Sort);
-                 products= await _repository.GetAllWithSpecAsync(spec);
-              return _mapper.Map<IReadOnlyList<ProductDto>>(products);
-            }
-           products= await _repository.GetAllAsync();
-            return _mapper.Map<IReadOnlyList<ProductDto>>(products);
+            //IReadOnlyList<Product> products;
+            //if ((request.SpecParams.Brands.Any()) || (request.SpecParams.Types.Any()) || !string.IsNullOrEmpty(request.SpecParams.sort))
+            //{
+            //    var spec =new ProductSpecification(request.SpecParams);
+            //     products= await _repository.GetAllWithSpecAsync(spec);
+            //}
+            //else
+            //{
+            //    products = await _repository.GetAllAsync();
+            //}
+            var spec = new ProductSpecification(request.SpecParams);
+            var products = await _repository.GetAllWithSpecAsync(spec);
+            var ProductsDtoList=  _mapper.Map<IReadOnlyList <ProductDto>>(products);
+            var Count= await _repository.CountAsync(spec);
+            var resultedProduct = new Pagination<ProductDto>(request.SpecParams.PageSize, request.SpecParams.PageIndex,
+                Count, ProductsDtoList);
+            return (resultedProduct);
         }
     }
     

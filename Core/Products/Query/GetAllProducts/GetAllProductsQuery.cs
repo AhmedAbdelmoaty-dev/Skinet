@@ -1,19 +1,17 @@
 ﻿using Application.Products.Dtos;
+using Application.Specification;
 using MediatR;
+using Skinet.RequestHelpers;
 
 
 namespace Application.Products.Query.GetAllProducts
 {
-    internal class GetAllProductsQuery:IRequest<IReadOnlyList<ProductDto>>
+    public class GetAllProductsQuery:IRequest<Pagination<ProductDto>>
     {
-        public string? Brand { get; set; }
-        public string? Type { get; set; }
-        public string? Sort { get; set; }
-        public GetAllProductsQuery(string brand="",string type="",string sort="")
+       public ProductSpecParams SpecParams { get; set; }
+        public GetAllProductsQuery(ProductSpecParams specParams)
         {
-            Brand=brand;
-            Type=type;
-            Sort=sort;
+           SpecParams = specParams;
         }
     }
     
