@@ -1,0 +1,15 @@
+ :host {
+      display: block;
+    }
+    
+    .mat-mdc-chip {
+      font-size: 0.75rem;
+    }
+    
+    .text-primary {
+      color: var(--mdc-theme-primary, #1976d2);
+    }
+    
+    .border-primary {
+      border-color: var(--mdc-theme-primary, #1976d2);
+    }

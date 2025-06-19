@@ -1,0 +1,182 @@
+   @if(product){
+   <div class="max-w-6xl mx-auto p-6 bg-white">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        
+        <!-- Product Image Section -->
+        <div class="space-y-4">
+          <div class="relative overflow-hidden rounded-lg bg-gray-100 aspect-square">
+            <img 
+              [src]="product.pictureUrl" 
+              [alt]="product.name"
+              class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+              (error)="onImageError($event)"
+            />
+            <div class="absolute top-4 right-4">
+              <button mat-mini-fab color="accent" class="shadow-lg">
+                <mat-icon>favorite_border</mat-icon>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Thumbnail placeholder for future enhancement -->
+          <div class="flex space-x-2 overflow-x-auto pb-2">
+            <div class="flex-shrink-0 w-16 h-16 bg-gray-200 rounded border-2 border-primary cursor-pointer">
+              <img [src]="product.pictureUrl" [alt]="product.name" class="w-full h-full object-cover rounded">
+            </div>
+          </div>
+        </div>
+
+        <!-- Product Info Section -->
+        <div class="space-y-6">
+          <!-- Brand and Stock Status -->
+          <div class="flex items-center justify-between">
+            <mat-chip-set>
+              <mat-chip class="bg-blue-100 text-blue-800">{{ product.brand }}</mat-chip>
+              <mat-chip class="bg-green-100 text-green-800">{{ product.type }}</mat-chip>
+            </mat-chip-set>
+            <div class="flex items-center space-x-2">
+              <mat-icon 
+                [class]="product.quantityInStock > 0 ? 'text-green-600' : 'text-red-600'"
+              >
+                {{ product.quantityInStock > 0 ? 'check_circle' : 'cancel' }}
+              </mat-icon>
+              <span 
+                [class]="product.quantityInStock > 0 ? 'text-green-600' : 'text-red-600'"
+                class="text-sm font-medium"
+              >
+                {{ getStockStatus() }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Product Name -->
+          <h1 class="text-3xl font-bold text-gray-900 leading-tight">
+            {{ product.name }}
+          </h1>
+
+          <!-- Price -->
+          <div class="flex items-baseline space-x-2">
+            <span class="text-4xl font-bold text-primary">
+              ${{ product.price | number:'1.2-2' }}
+            </span>
+            <span class="text-lg text-gray-500 line-through" *ngIf="hasDiscount">
+              ${{ originalPrice | number:'1.2-2' }}
+            </span>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <!-- Description -->
+          <div class="space-y-3">
+            <h3 class="text-lg font-semibold text-gray-900">Description</h3>
+            <p class="text-gray-700 leading-relaxed">
+              {{ product.description }}
+            </p>
+          </div>
+
+          <!-- Product Details -->
+          <div class="bg-gray-50 rounded-lg p-4 space-y-3">
+            <h3 class="text-lg font-semibold text-gray-900">Product Details</h3>
+            <div class="grid grid-cols-2 gap-4 text-sm">
+              <div class="flex justify-between">
+                <span class="text-gray-600">Product ID:</span>
+                <span class="font-medium">#{{ product.id }}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600">Brand:</span>
+                <span class="font-medium">{{ product.brand }}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600">Type:</span>
+                <span class="font-medium">{{ product.type }}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600">In Stock:</span>
+                <span class="font-medium">{{ product.quantityInStock }} units</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="space-y-4">
+            <div class="flex items-center space-x-4">
+              <!-- Quantity Selector -->
+              <div class="flex items-center border rounded-lg">
+                <button 
+                  mat-icon-button 
+                  (click)="decreaseQuantity()"
+                  [disabled]="selectedQuantity <= 1"
+                >
+                  <mat-icon>remove</mat-icon>
+                </button>
+                <span class="px-4 py-2 min-w-[3rem] text-center font-medium">
+                  {{ selectedQuantity }}
+                </span>
+                <button 
+                  mat-icon-button 
+                  (click)="increaseQuantity()"
+                  [disabled]="selectedQuantity >= product.quantityInStock"
+                >
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+              
+              <!-- Stock Info -->
+              <span class="text-sm text-gray-600">
+                {{ product.quantityInStock }} available
+              </span>
+            </div>
+
+            <!-- Add to Cart Button -->
+            <button 
+              mat-raised-button 
+              color="primary" 
+              class="w-full py-3 text-lg font-semibold"
+              [disabled]="product.quantityInStock === 0"
+              (click)="addToCart()"
+            >
+              <mat-icon class="mr-2">shopping_cart</mat-icon>
+              {{ product.quantityInStock > 0 ? 'Add to Cart' : 'Out of Stock' }}
+            </button>
+
+            <!-- Secondary Actions -->
+            <div class="flex space-x-3">
+              <button 
+                mat-stroked-button 
+                color="accent" 
+                class="flex-1"
+                (click)="addToWishlist()"
+              >
+                <mat-icon class="mr-2">favorite_border</mat-icon>
+                Add to Wishlist
+              </button>
+              <button 
+                mat-stroked-button 
+                class="flex-1"
+                (click)="shareProduct()"
+              >
+                <mat-icon class="mr-2">share</mat-icon>
+                Share
+              </button>
+            </div>
+          </div>
+
+          <!-- Additional Info -->
+          <div class="border-t pt-6 space-y-4">
+            <div class="flex items-center space-x-3 text-sm text-gray-600">
+              <mat-icon class="text-green-600">local_shipping</mat-icon>
+              <span>Free shipping on orders over $50</span>
+            </div>
+            <div class="flex items-center space-x-3 text-sm text-gray-600">
+              <mat-icon class="text-blue-600">assignment_return</mat-icon>
+              <span>30-day return policy</span>
+            </div>
+            <div class="flex items-center space-x-3 text-sm text-gray-600">
+              <mat-icon class="text-purple-600">security</mat-icon>
+              <span>Secure payment guaranteed</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+}
