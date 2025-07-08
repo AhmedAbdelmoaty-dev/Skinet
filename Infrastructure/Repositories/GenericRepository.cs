@@ -9,9 +9,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
-    internal class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
+    public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     {
-        private readonly AppDbContext _context;
+        protected readonly AppDbContext _context;
         public GenericRepository(AppDbContext context)
         {
             _context = context;
@@ -31,7 +31,12 @@ namespace Infrastructure.Repositories
 
         public async Task<IReadOnlyList<T>> GetAllWithSpecAsync(ISpecefication<T> spec)
         {
-          return await  ApplySpecefication(spec).ToListAsync();
+            var query = ApplySpecefication(spec);
+
+            // This line logs the actual SQL EF Core is generating 👇
+            var sql = query.ToQueryString();
+            Console.WriteLine(sql);
+            return await  ApplySpecefication(spec).ToListAsync();
         }
 
         public int  Add(T entity)

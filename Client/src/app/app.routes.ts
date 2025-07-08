@@ -5,13 +5,15 @@ import { ProductDetailsComponent } from './Features/product-details/product-deta
 import { NotFoundComponent } from './Shared/components/not-found/not-found.component';
 import { ServerErrorComponent } from './Shared/components/server-error/server-error.component';
 import { TestErrorComponent } from './Features/test-error/test-error.component';
+import { Cart } from './Features/cart/cart';
 
 export const routes: Routes = [
-    {path:'',component:HomeComponent},
-    {path:'shop',component:ShopComponent},
-    {path:'shop/:id',component:ProductDetailsComponent},
-    {path:'test-error',component:TestErrorComponent},
-    {path:'not-found', component:NotFoundComponent},
-    {path:'server-error', component:ServerErrorComponent},
-    {path:'**',redirectTo:'not-found',pathMatch:'full'}
+  { path: '', component: HomeComponent },
+  { path: 'shop', component: ShopComponent },
+  { path: 'shop/:id', component: ProductDetailsComponent },
+  { path: 'cart', component: Cart },
+  { path: 'test-error', component: TestErrorComponent },
+  { path: 'not-found', component: NotFoundComponent },
+  { path: 'server-error', component: ServerErrorComponent },
+  { path: '**', redirectTo: 'not-found', pathMatch: 'full' },
 ];

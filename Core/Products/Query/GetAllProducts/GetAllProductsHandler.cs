@@ -19,16 +19,7 @@ namespace Application.Products.Query.GetAllProducts
         }
         public async Task<Pagination<ProductDto>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
         {
-            //IReadOnlyList<Product> products;
-            //if ((request.SpecParams.Brands.Any()) || (request.SpecParams.Types.Any()) || !string.IsNullOrEmpty(request.SpecParams.sort))
-            //{
-            //    var spec =new ProductSpecification(request.SpecParams);
-            //     products= await _repository.GetAllWithSpecAsync(spec);
-            //}
-            //else
-            //{
-            //    products = await _repository.GetAllAsync();
-            //}
+            
             var spec = new ProductSpecification(request.SpecParams);
             var products = await _repository.GetAllWithSpecAsync(spec);
             var ProductsDtoList=  _mapper.Map<IReadOnlyList <ProductDto>>(products);

@@ -1,0 +1,21 @@
+<div  class="flex items-center justify-between p-4 ">
+    <!-- left col -->
+    <div class="flex gap-5 items-center w-80">
+        <img class="w-15 h-15 object-cover rounded-xl" [src]="item()?.imageUrl">
+        <div class="flex flex-col gap-2">
+            <h3 class="text-lg">{{item()?.productName}}</h3>
+            <h3 class="text-lg">{{item()?.type}}</h3>
+            <p class="text-lg text-purple-700">{{item()?.price|currency}}</p>
+        </div>
+    </div>
+    <div>
+        <button (click)="delete.emit(item()?.productId!)" class="flex items-center text-red-700 tex-lg hover:text-red-400 transition duration-300">Delete <mat-icon>delete</mat-icon></button>
+    </div>
+    <!-- right col -->
+     <div class="flex mx-12 ">
+         <button (click)="decrease.emit(item()?.productId!) " class="rounded-l-xl border  p-2 transition  hover:shadow-xl  hover:shadow-gray-200 hover:bg-gray-100 hover:border-gray-400 "><mat-icon class="text-xl">remove</mat-icon></button>
+         <p class="border text-purple-600 text-xl   flex px-8 items-center">{{item()?.quantity}}</p>
+         <button (click)="increase.emit(item()!)" class="rounded-r-xl   border  p-2 transition  hover:shadow-xl  hover:shadow-gray-200 hover:bg-gray-100 hover:border-gray-400"><mat-icon class="text-xl">add</mat-icon></button>
+     </div>
+     <h2 class=" font-semibold text-xl" >{{item()?.quantity!*item()?.price! |currency }}</h2>
+</div>

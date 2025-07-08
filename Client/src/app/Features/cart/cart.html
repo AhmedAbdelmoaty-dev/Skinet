@@ -1,0 +1,14 @@
+<div class="flex justify-around gap-3 items-start p-10">
+    <div>
+       <div class="flex items-center border  rounded-xl ">
+        
+            <div class="flex w-full flex-col">
+                @for (item of cartService.cart()?.items; track item.productId) {
+                    <app-cart-item (delete)="deleteCartItem($event)" (decrease)="decreaseQuantity($event)" (increase)="increaseQuantity($event)" [item]="item"></app-cart-item>
+                    <hr>
+                }
+            </div>
+        </div>
+    </div>
+    <app-order-summary></app-order-summary>
+</div>

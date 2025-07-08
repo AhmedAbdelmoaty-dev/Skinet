@@ -1,48 +1,71 @@
 @if(products){
-<div class="px-4" >
-<div class="flex items-center justify-between my-3">
-    <mat-paginator [length]="products.count"
-    (page)="handlePageEvent($event)"
-    [pageSize]="shopParams.pageSize"
-    [showFirstLastButtons]="true"
-    [pageSizeOptions]="pageSizes"
-    [pageIndex]="shopParams.pageNumber-1"
-    aria-label="Select Page"
-    class="!bg-white"
+<div class="px-4">
+  <div class="flex items-center justify-between my-3">
+    <mat-paginator
+      [length]="products.count"
+      (page)="handlePageEvent($event)"
+      [pageSize]="shopParams.pageSize"
+      [showFirstLastButtons]="true"
+      [pageSizeOptions]="pageSizes"
+      [pageIndex]="shopParams.pageNumber - 1"
+      aria-label="Select Page"
+      class="!bg-white"
     >
     </mat-paginator>
 
     <form #searchForm="ngForm" class="w-1/3" (ngSubmit)="onSearchChange()">
-        <div class="flex">
-            <input [(ngModel)]="shopParams.search" placeholder="Search" type="search" name="search" class="border-1 border-r-0 border-gray-400 focus:border-blue-700 rounded-2xl rounded-r-none p-2 w-2/3">
-            <button type="submit" class="border-1 cursor-pointer hover:text-blue-700 transition duration-300 flex items-center border-gray-400 rounded-l-none py-1 px-3   rounded-2xl"><mat-icon>search</mat-icon></button>
-        </div>
+      <div class="flex">
+        <input
+          [(ngModel)]="shopParams.search"
+          placeholder="Search"
+          type="search"
+          name="search"
+          class="border border-r-0 border-gray-400 focus:border-blue-700 rounded-2xl rounded-r-none p-2 w-2/3"
+        />
+        <button
+          type="submit"
+          class="border cursor-pointer hover:text-blue-700 transition duration-300 flex items-center border-gray-400 rounded-l-none py-1 px-3 rounded-2xl"
+        >
+          <mat-icon>search</mat-icon>
+        </button>
+      </div>
     </form>
     <div class="flex items-center">
-        <div class="flex gap-3">
-        <button (click)="openFilterDialog('150ms','150ms')"  class="rounded-md border-1 flex items-center font-medium text-lg  border-gray-400 py-1 px-3  cursor-pointer  text-blue-600 hover:bg-blue-100 transition duration-300 ">
-        <mat-icon>filter_list</mat-icon>Filters
-     </button>
-     <button [matMenuTriggerFor]="sortMenu"  class="rounded-md border-1 flex items-center font-medium text-lg  border-gray-400 py-1 px-3  cursor-pointer  text-blue-600 hover:bg-blue-100 transition duration-300 ">
-        <mat-icon>swap_vert</mat-icon>Sort
-     </button>
+      <div class="flex gap-3">
+        <button
+          (click)="openFilterDialog('150ms', '150ms')"
+          class="rounded-md border flex items-center font-medium text-lg border-gray-400 py-1 px-3 cursor-pointer text-blue-600 hover:bg-blue-100 transition duration-300"
+        >
+          <mat-icon>filter_list</mat-icon>Filters
+        </button>
+        <button
+          [matMenuTriggerFor]="sortMenu"
+          class="rounded-md border flex items-center font-medium text-lg border-gray-400 py-1 px-3 cursor-pointer text-blue-600 hover:bg-blue-100 transition duration-300"
+        >
+          <mat-icon>swap_vert</mat-icon>Sort
+        </button>
+      </div>
     </div>
-    </div>
-    
-     
- </div>
-<div class="grid grid-cols-5 gap-3">
-@for(product of products.data; track product.id){
+  </div>
+  <div class="grid grid-cols-5 gap-3">
+    @for(product of products.data; track product.id){
     <app-product-item [product]="product"></app-product-item>
-}
-</div>
+    }
+  </div>
 
-<mat-menu #sortMenu="matMenu">
-    <mat-selection-list [multiple]="false" (selectionChange)="onSortChange($event)">
-        @for(obj of sortOptions; track $index){
-            <mat-list-option [value]="obj.value" [selected]="obj.value===shopParams.sort" >{{obj.name}}</mat-list-option>
-        }
+  <mat-menu #sortMenu="matMenu">
+    <mat-selection-list
+      [multiple]="false"
+      (selectionChange)="onSortChange($event)"
+    >
+      @for(obj of sortOptions; track $index){
+      <mat-list-option
+        [value]="obj.value"
+        [selected]="obj.value === shopParams.sort"
+        >{{ obj.name }}</mat-list-option
+      >
+      }
     </mat-selection-list>
-</mat-menu>
+  </mat-menu>
 </div>
 }

@@ -1,15 +1,24 @@
 @if(product()){
-    <mat-card class="product-card">
-            <img routerLink="/shop/{{product()?.id}}" mat-card-image src="{{product()?.pictureUrl}}" alt="image of {{product()?.name}}" class="cursor-pointer" >
-            <mat-card-content>
-                <h2 class="text-sm font-semibold uppercase mt-2">{{product()?.name}}</h2>
-                <p>{{product()?.price|currency}}</p>
-            </mat-card-content>
-            <mat-card-actions>
-                <button  class="flex items-center justify-center gap-2 rounded-md w-full border-1 font-medium text-lg  border-gray-400 px-6 py-1 cursor-pointer  text-purple-900 hover:bg-purple-200 transition duration-300 ">
-                    <mat-icon>add_shopping_cart</mat-icon>
-                    Add to cart
-                </button>
-            </mat-card-actions>
-     </mat-card>
+<mat-card class="product-card">
+  <img
+    routerLink="/shop/{{ product()?.id }}"
+    mat-card-image
+    src="{{ product()?.pictureUrl }}"
+    alt="image of {{ product()?.name }}"
+    class="cursor-pointer"
+  />
+  <mat-card-content>
+    <h2 class="text-sm font-semibold uppercase mt-2">{{ product()?.name }}</h2>
+    <p>{{ product()?.price | currency }}</p>
+  </mat-card-content>
+  <mat-card-actions (click)="$event.stopPropagation()">
+    <button
+      (click)="cartService.addItemToCart(product()!)"
+      class="flex items-center justify-center gap-2 rounded-md w-full border font-medium text-lg border-gray-400 px-6 py-1 cursor-pointer text-purple-900 hover:bg-purple-200 transition duration-300"
+    >
+      <mat-icon>add_shopping_cart</mat-icon>
+      Add to cart
+    </button>
+  </mat-card-actions>
+</mat-card>
 }
