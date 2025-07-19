@@ -17,7 +17,7 @@ namespace Application.Products.Commands.DeleteProduct
             var product = await _repository.GetByIdAsync(request.Id);
             if (product is null)
             {
-                throw new NotFoundException(nameof(Product), request.Id);
+                throw new NotFoundResourceException(nameof(Product), request.Id);
             }
             _repository.Delete(product);
             await _repository.SaveChangesAsync();

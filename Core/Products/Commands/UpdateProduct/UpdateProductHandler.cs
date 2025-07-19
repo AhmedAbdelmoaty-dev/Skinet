@@ -21,7 +21,7 @@ namespace Application.Products.Commands.UpdateProduct
             var product = await _repository.GetByIdAsync(request.Id);
             if(product is null)
             {
-                throw new NotFoundException(nameof(Product), request.Id);
+                throw new NotFoundResourceException(nameof(Product), request.Id);
             }
             _mapper.Map(request, product);
             await _repository.SaveChangesAsync();

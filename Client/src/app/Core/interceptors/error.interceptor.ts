@@ -8,7 +8,13 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req).pipe(
     catchError((err: HttpErrorResponse) => {
       if (err.status === 400) {
-        alert(err.error.title || err.error);
+        const errors = err.error.errors;
+  if (errors && typeof errors === 'object') {
+    const messages = Object.values(errors).flat();
+    alert(messages.join('\n'));
+  } else {
+    alert(err.error.title || err.error);
+  }
       }
       if (err.status === 401) {
         alert(err.error.title || err.error);

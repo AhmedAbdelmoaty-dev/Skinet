@@ -8,6 +8,7 @@ using Application.Products.Query.GetAllTypes;
 using Application.Products.Query.GetProductById;
 using Application.Specification;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Skinet.Controllers
@@ -22,6 +23,7 @@ namespace Skinet.Controllers
             _mediator = mediator;
         }
         [HttpGet("{id}")]
+        
         public async Task<ActionResult<ProductDto>> GetById(int id)
         {
             var product = await _mediator.Send(new GetProductByIdQuery(id));

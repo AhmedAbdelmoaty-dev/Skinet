@@ -21,7 +21,7 @@ namespace Application.Products.Query.GetProductById
             var product = await _repository.GetByIdAsync(request.Id);
             if(product == null)
             {
-                throw new NotFoundException(nameof(product),request.Id);
+                throw new NotFoundResourceException(nameof(product),request.Id);
             }
             return _mapper.Map<ProductDto>(product);
         }

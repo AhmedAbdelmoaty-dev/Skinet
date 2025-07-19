@@ -1,0 +1,72 @@
+<mat-card class="!max-w-lg !mx-auto !mt-32 !p-8 !bg-white shadow-xl">
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <div class="text-center mb-6">
+            <h1 class="text-3xl font-semibold text-purple-700">Login</h1>
+        </div>
+        
+            <label class="text-lg ">First name</label>
+            <input  formControlName="firstName"
+               class="my-2 w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"   placeholder="first Name" />
+            @if(registerForm.get('firstName')?.hasError('required')&&registerForm.get('firstName')?.touched){
+                <span class="text-red-500 block mb-3">First name is required</span>
+            }
+            <label class="text-lg ">Last name</label>
+            <input  formControlName="lastName" 
+               class="my-2 w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"   placeholder="last Name" />
+                @if(registerForm.get('lastName')?.hasError('required')&&registerForm.get('lastName')?.touched){
+                <span class="text-red-500 block mb-3">Last name is required</span>
+            }
+        
+                 <label class="text-lg ">User name</label>
+            <input  formControlName="userName" 
+               class="my-2 w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"   placeholder="User name" />
+            
+                @if(registerForm.get('userName')?.hasError('required')&&registerForm.get('userName')?.touched){
+                <span class="text-red-500 block mb-3">User name is required</span>
+            }
+
+            <label class="text-lg">Email</label>
+             <input  formControlName="email" 
+               class="my-2 w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"   placeholder="email" />
+            
+                @if(registerForm.get('email')?.hasError('required')&&registerForm.get('email')?.touched){
+                <span class="text-red-500 block mb-3">Email is required</span>
+                 }
+                 @if(registerForm.get('email')?.hasError('email')){
+                    <span class="text-red-500 block mb-3">Invalid email format</span>
+                 }
+            
+               <label class="text-lg">Password</label>
+            <input  formControlName="password" type="password"
+               class="my-2 w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"  placeholder="Password" />
+                 @if(registerForm.get('password')?.hasError('required')&&registerForm.get('password')?.touched){
+                    <span class="text-red-500 block mb-3">password is required</span>
+                 }
+                 @if(registerForm.get('password')?.hasError('pattern')){
+                    <span class="text-red-500 block mb-3">Invalid Password format , Password must have at least 1 uppercase letter and at least one number and consist of 8 digits</span>
+                 }
+
+                      <label class="text-lg">Confirm password</label>
+            <input  formControlName="confirmPassword" type="password"
+               class="my-2 w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"  placeholder="Password" />
+                 @if(registerForm.get('confirmPassword')?.hasError('notMatch')&&registerForm.get('confirmPassword')?.touched){
+                    <span class="text-red-500 block mb-3">Password should match</span>
+                 }
+               
+               <mat-divider></mat-divider>
+            
+
+               @if (validationErrors) {
+                <div class="mb-3 p-4 bg-red-100 text-red-600">
+                        <ul class="list-disc px-3">
+                            @for (error of validationErrors; track $index) {
+                                <li>{{error}}</li>
+                            }
+                        </ul>
+                </div>
+               }
+        
+         <button [disabled]="registerForm.invalid"  type="submit" color="primary"
+            class="w-full mt-10 mb-3 py-2 rounded-xl text-white text-lg bg-purple-600 hover:bg-purple-900 transition duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed">Register</button>
+    </form>
+</mat-card>

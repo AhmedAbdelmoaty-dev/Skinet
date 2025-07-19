@@ -3,8 +3,10 @@ using Application.Contracts.Services;
 using Infrastructure.Data;
 using Infrastructure.Data.SeedData;
 using Infrastructure.Data.Seeders;
+using Infrastructure.IdentityEntities;
 using Infrastructure.Repositories;
 using Infrastructure.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,9 +14,9 @@ using StackExchange.Redis;
 
 namespace Infrastructure.Extensions
 {
-    public static class ServcieCollectionExtensions
+    public static class InfrastructureServiceRegistrations
     {
-        public static void AddInfrastructure(this IServiceCollection services,IConfiguration configuration)
+        public static void AddInfrastructureServices(this IServiceCollection services,IConfiguration configuration)
         {
             services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
             
@@ -31,9 +33,18 @@ namespace Infrastructure.Extensions
                 return ConnectionMultiplexer.Connect(configurationOption);
 
             });
-            services.AddSingleton<ICartService, CartService>(); 
+            services.AddSingleton<ICartService, CartService>();
+
+            services.AddIdentityCore<AppUser>()
+                .AddRoles<IdentityRole>()
+                .AddRoleManager<RoleManager<IdentityRole>>()
+                .AddSignInManager<SignInManager<AppUser>>()
+                .AddUserManager<UserManager<AppUser>>()
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
 
 
+            services.AddScoped<ITokenService, TokenService>();
         }
     }
 }

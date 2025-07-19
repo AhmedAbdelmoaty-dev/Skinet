@@ -31,7 +31,7 @@ export class ShopService {
     params=params.append('pageIndex',shopParams.pageNumber)
     
     console.log(params)
-   return this.http.get<Pagination<Product>>(this.Url+"products",{params})
+   return this.http.get<Pagination<Product>>(this.Url+"products",{params,withCredentials:true})
   }
   getTypes(){
     if(this.types.length > 0) return

@@ -1,10 +1,12 @@
-﻿namespace Application.Exceptions
+﻿
+
+namespace Application.Exceptions
 {
-    public class NotFoundException:Exception
+    public class NotFoundException:AppException
     {
-        public NotFoundException(string resourceType,int resourceIdenrifier):
-            base($" {resourceType} with Id {resourceIdenrifier} was not found.")
+        public NotFoundException(string message="not found"):base(404, message)
         {
+            
         }
     }
 }
