@@ -37,6 +37,9 @@ namespace Application.Auth.Commands.Login
             var token =_tokenService.CreateToken(user, roles);
 
             var refreshToken = _tokenService.CreateRefreshToken(user);
+            user.RefreshTokens.Add(refreshToken);
+               await _userManager.UpdateAsync(user);
+
 
             return new AuthDto
             {

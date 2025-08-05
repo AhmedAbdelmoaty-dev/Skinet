@@ -5,12 +5,14 @@ import { environment } from '../../../environments/environment';
 import { Cart, CartItem } from '../../Shared/models/cart';
 import { Product } from '../../Shared/models/product';
 import { map } from 'rxjs';
+import { DeliveryMethod } from '../../Shared/models/deliveryMethod';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CartService {
   cart = signal<Cart | null>(null);
+  selectedDelivery=signal<DeliveryMethod|null>(null)
   private http = inject(HttpClient);
   itemCount = computed(() => {
     return this.cart()?.items.reduce((acc, item) => acc + item.quantity, 0);
@@ -19,9 +21,10 @@ export class CartService {
   totals=computed(()=>{
     const cart=this.cart()
     if(!cart) return null
-    const discount=0;
-    const shipping=5;
+    const delivery=this.selectedDelivery();
+    const discount=0
     const subtotal=cart.items.reduce((acc,item)=>acc+=item.quantity*item.price,0)
+    const shipping =delivery? delivery.price : 0
     return {
       discount,
       shipping,

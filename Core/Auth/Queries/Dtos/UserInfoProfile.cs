@@ -1,10 +1,6 @@
 ﻿using AutoMapper;
 using Infrastructure.IdentityEntities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Application.Auth.Queries.Dtos
 {
@@ -12,7 +8,10 @@ namespace Application.Auth.Queries.Dtos
     {
         public UserInfoProfile()
         {
-            CreateMap<AppUser, UserInfoDto>();
+            CreateMap<AppUser, UserInfoDto>()
+            .ForMember(dest => dest.Roles, opt => opt.Ignore());
+
+            CreateMap<Domain.Entites.Address, AddressDto>();
         }
     }
 }

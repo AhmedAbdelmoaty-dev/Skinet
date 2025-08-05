@@ -1,0 +1,10 @@
+﻿namespace Domain.Entites.OrderAggregate
+{
+    public class PaymentSummary
+    {
+        public int last4 {  get; set; }
+        public required string Brand { get; set; }
+        public int ExpMonth { get; set; }
+        public int ExpYear { get; set; }
+    }
+}

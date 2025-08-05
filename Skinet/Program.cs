@@ -1,9 +1,8 @@
 
+using Application.Contracts.Seeders;
 using Application.Extensions;
 using Application.RequestHelpers;
-using FluentValidation;
 using FluentValidation.AspNetCore;
-using Infrastructure.Data.SeedData;
 using Infrastructure.Extensions;
 using Skinet.Middlewares;
 using Skinet.Registrations;
@@ -22,11 +21,19 @@ builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JWT"));
 
 var app = builder.Build();
-var scope =app.Services.CreateScope();
-var seeder = scope.ServiceProvider.GetRequiredService<IProductSeeder>();
-await seeder.SeedDataAsync();
+
+using (var scope =app.Services.CreateScope())
+{
+    var services= scope.ServiceProvider;
+    var productSeeder = services.GetRequiredService<IProductSeeder>();
+    await productSeeder.SeedDataAsync();
+    var deliveryMethodSeeder = services.GetRequiredService<IDeliveryMethodSeeder>();
+    await deliveryMethodSeeder.SeedDataAsync();
+}
+
+
 app.UseMiddleware<ErrorHandelingMiddleware>();
-app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowCredentials().AllowAnyOrigin().WithOrigins("http://localhost:4200", "https://localhost:4200"));
+
 
 
 
@@ -37,6 +44,12 @@ if (app.Environment.IsDevelopment())
 }
 app.UseHttpsRedirection();
 app.UseRouting();
+app.UseCors(policy => policy
+    .WithOrigins("http://localhost:4200")
+    .AllowAnyHeader()
+    .AllowAnyMethod()
+    .AllowCredentials()
+);
 app.UseAuthentication();
 
 app.UseAuthorization();

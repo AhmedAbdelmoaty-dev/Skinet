@@ -35,7 +35,6 @@ export class HeaderComponent {
   logout(){
     this.accountService.logout().subscribe({
       next:()=>{
-
         this.accountService.currentUser.set(null),
         console.log(this.accountService.currentUser());
         this.router.navigateByUrl("/")

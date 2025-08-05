@@ -1,7 +1,4 @@
 ﻿
-
-using Microsoft.AspNetCore.Identity;
-
 namespace Application.Auth.Queries.Dtos
 {
     public class UserInfoDto

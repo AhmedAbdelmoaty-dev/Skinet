@@ -16,7 +16,11 @@ namespace Application.Auth.Commands.Logout
         }
         public async Task Handle(LogoutCommand request, CancellationToken cancellationToken)
         {
-          var result=await  _tokenService.RevokeRefreshTokenAsync(request.refreshToken);
+            if (string.IsNullOrEmpty(request.RefreshToken))
+            {
+                throw new BadRequestException("refresh token is missing");
+            }
+          var result=await  _tokenService.RevokeRefreshTokenAsync(request.RefreshToken);
             if (!result)
                 throw new BadRequestException("Something went wrong");
             return;

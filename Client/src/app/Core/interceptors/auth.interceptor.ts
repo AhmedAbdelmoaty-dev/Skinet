@@ -15,6 +15,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   //and pass the modified one
   const accountService=inject(AccountService)
   let accessToken=localStorage.getItem('accessToken')
+  console.log('Token in interceptor:', localStorage.getItem('accessToken'));
   const clonedRequest=req.clone({
     setHeaders:{
      'Authorization': `Bearer ${accessToken}`
@@ -34,6 +35,7 @@ function handle401Error(request:HttpRequest<unknown>,next:HttpHandlerFn,accountS
   return accountService.RequestUpdateAccessToken().pipe(
     tap((res:AuthDto)=>{
       localStorage.setItem('accessToken',res.token)
+      localStorage.setItem('refreshToken',res.refreshToken)
     }),
     switchMap((res:AuthDto)=>{
       const retryRequest=request.clone({

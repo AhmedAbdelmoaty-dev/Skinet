@@ -18,8 +18,13 @@ export class AccountService {
     params=params.append("useCookies",true)
    return  this.http.post<User>(this.baseUrl+'/login',values,{params}).pipe(
     tap(user=>{
-      if(user.token)
+      console.log(user)
+      if(user.token){
         localStorage.setItem('accessToken',user.token)
+      }
+      if(user.refreshToken){
+        localStorage.setItem('refreshToken',user.refreshToken)
+      }
     })
    )
   }
@@ -29,27 +34,43 @@ export class AccountService {
       tap(user=>{
       if(user.token)
         localStorage.setItem('accessToken',user.token)
+      if(user.refreshToken)
+        localStorage.setItem('refreshToken',user.refreshToken)
     }))
   }
 
   getUserInfo(){
-    return this.http.get<User>(this.baseUrl+'/userinfo').pipe(
+    return this.http.get<User>(this.baseUrl+'/userinfo',{params:{withAddress:true}}).pipe(
       tap(user=>this.currentUser.set(user))
-      
     )
     
   }
 
   logout(){
-    return this.http.post(this.baseUrl+'/logout',{})
+    return this.http.post(this.baseUrl+'/logout',{
+      refreshtoken:localStorage.getItem('refreshToken')
+    }).pipe(
+      tap(()=>{
+        localStorage.removeItem('accessToken')
+        localStorage.removeItem('refreshToken')
+      })
+    )
   }
 
   updateAddress(address:Address){
-    return this.http.post(this.baseUrl+'/address',{address})
+    return this.http.post(this.baseUrl+'/address',address).pipe(
+      tap(()=>{
+        this.currentUser.update(user=>{
+          if(user) user.address=address
+          return user
+        })
+      })
+    )
   }
 
   RequestUpdateAccessToken(){
-    return this.http.post<AuthDto>(this.baseUrl+'/refresh-token',{})
+    const rToken=localStorage.getItem('refreshToken')
+    return this.http.post<AuthDto>(this.baseUrl+'/refresh-token',{refreshToken:rToken})
   }
 }
 

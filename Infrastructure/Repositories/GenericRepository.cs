@@ -33,7 +33,6 @@ namespace Infrastructure.Repositories
         {
             var query = ApplySpecefication(spec);
 
-            // This line logs the actual SQL EF Core is generating 👇
             var sql = query.ToQueryString();
             Console.WriteLine(sql);
             return await  ApplySpecefication(spec).ToListAsync();

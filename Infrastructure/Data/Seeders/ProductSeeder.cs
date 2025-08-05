@@ -1,5 +1,5 @@
 ﻿using Domain.Entites;
-using Infrastructure.Data.SeedData;
+using Application.Contracts.Seeders;
 using System.Text.Json;
 
 namespace Infrastructure.Data.Seeders

@@ -68,14 +68,14 @@ namespace Infrastructure.Services
                 CreatedAt = DateTime.UtcNow
             };
         }
-        public async Task<AuthDto> UpdateRefreshTokenAsync(string token)
+        public async Task<AuthDto> RenewAccessTokenAsync(string refreshToken)
         {
-            var user = await _userManager.Users.SingleOrDefaultAsync(x => x.RefreshTokens.Any(x => x.Token == token));
+            var user = await _userManager.Users.SingleOrDefaultAsync(x => x.RefreshTokens.Any(x => x.Token == refreshToken));
             if (user == null)
             {
                 throw new BadRequestException("Invalid token");
             }
-            var oldRefreshToken = user.RefreshTokens.FirstOrDefault(x => x.Token == token);
+            var oldRefreshToken = user.RefreshTokens.FirstOrDefault(x => x.Token == refreshToken);
             if (!oldRefreshToken.IsActive)
             {
                 throw new BadRequestException("Invalid token");
@@ -101,7 +101,7 @@ namespace Infrastructure.Services
 
         public async Task<bool> RevokeRefreshTokenAsync(string token)
         {
-            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.RefreshTokens.Any(t => t.IsActive));
+            var user = await _userManager.Users.SingleOrDefaultAsync(x => x.RefreshTokens.Any(t => t.Token==token));
             if (user == null)
                 return false;
             var refreshToken = user.RefreshTokens.First(c => c.Token == token);

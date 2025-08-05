@@ -3,7 +3,8 @@ export interface User  {
     lastName:string,
     email:string,
     address:Address,
-    token:string
+    token:string,
+    refreshToken:string
 }
 
 export interface Address{

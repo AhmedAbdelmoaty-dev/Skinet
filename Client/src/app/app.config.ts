@@ -13,20 +13,27 @@ import { lastValueFrom } from 'rxjs';
 import { InitService } from './Core/Services/init.service';
 import { authInterceptor } from './Core/interceptors/auth.interceptor';
 
-// function initializeApp(service: InitService) {
-//   return () =>
-//     lastValueFrom(service.init()).finally(() => {
-//       const splash = document.getElementById('initial-splash');
-//       if (splash) {
-//         splash.remove();
-//       }
-//     });
-// }
+ function initializeApp(service: InitService) {
+  return () =>
+     lastValueFrom(service.init()).finally(() => {
+      const splash = document.getElementById('initial-splash');
+      if (splash) {
+        splash.remove();
+      }
+    });
+}
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideHttpClient(withInterceptors([errorInterceptor, loadingInterceptor,authInterceptor]))
-   
+    provideHttpClient(withInterceptors([errorInterceptor, loadingInterceptor,authInterceptor])),
+    {
+      provide:APP_INITIALIZER,
+      useFactory:initializeApp,
+      multi:true,
+      deps:[InitService]
+    }
+    
   ],
 };

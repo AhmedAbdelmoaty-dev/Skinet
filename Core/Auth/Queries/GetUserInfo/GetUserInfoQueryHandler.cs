@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Skinet.Extensions;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 
 namespace Application.Auth.Queries.GetUserInfo
 {
@@ -12,20 +13,22 @@ namespace Application.Auth.Queries.GetUserInfo
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly IMapper _mapper;
-        public GetUserInfoQueryHandler(UserManager<AppUser> userManager,IMapper mapper)
+        private readonly IHttpContextAccessor _contextAccessor;
+        public GetUserInfoQueryHandler(UserManager<AppUser> userManager,IMapper mapper,IHttpContextAccessor contextAccessor)
         {
             _userManager = userManager;
             _mapper = mapper;
+            _contextAccessor = contextAccessor;
         }
 
         public async Task<UserInfoDto> Handle(GetUserInfoQuery request, CancellationToken cancellationToken)
         {
-            if(!request.user.Identity.IsAuthenticated)
+            if(!_contextAccessor.HttpContext.User.Identity.IsAuthenticated)
                 throw new UnAuthorizedException("User is not authenticated");
 
             AppUser user = request.WithAddress ?
-                await _userManager.GetUserByEmailWithAddress(request.user) :
-                await _userManager.GetUserByEmail(request.user);
+                await _userManager.GetUserByEmailWithAddress(_contextAccessor.HttpContext.User) :
+                await _userManager.GetUserByEmail(_contextAccessor.HttpContext.User);
 
 
             return _mapper.Map<UserInfoDto>(user);

@@ -1,6 +1,6 @@
 ﻿
 
-namespace Infrastructure.Data.SeedData
+namespace Application.Contracts.Seeders
 {
     public interface IProductSeeder
     {

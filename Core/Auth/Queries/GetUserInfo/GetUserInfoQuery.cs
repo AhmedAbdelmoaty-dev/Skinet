@@ -11,7 +11,6 @@ namespace Application.Auth.Queries.GetUserInfo
 {
     public class GetUserInfoQuery:IRequest<UserInfoDto>
     {
-       public ClaimsPrincipal user { get; set; }
         public bool WithAddress { get; set; } = false;
     }
 }

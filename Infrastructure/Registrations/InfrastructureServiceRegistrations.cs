@@ -1,7 +1,7 @@
 ﻿using Application.Contracts.Repositories;
+using Application.Contracts.Seeders;
 using Application.Contracts.Services;
 using Infrastructure.Data;
-using Infrastructure.Data.SeedData;
 using Infrastructure.Data.Seeders;
 using Infrastructure.IdentityEntities;
 using Infrastructure.Repositories;
@@ -24,6 +24,10 @@ namespace Infrastructure.Extensions
             
             services.AddScoped<IProductSeeder, ProductSeeder>();
             services.AddScoped<IProductRepository, ProductRepository>();
+
+            services.AddScoped<IDeliveryMethodSeeder, DeliveryMethodSeeder>();
+
+            services.AddScoped<IPaymentService, PaymentService>();
 
             services.AddSingleton<IConnectionMultiplexer>(config =>
             {

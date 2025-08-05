@@ -6,10 +6,10 @@ namespace Application.Contracts.Services
 {
     public interface ITokenService
     {
-        public string CreateToken(AppUser user,IList<string>Roles);
-        public Task<AuthDto> UpdateRefreshTokenAsync(string token);
-        public RefreshToken CreateRefreshToken(AppUser user);
+         string CreateToken(AppUser user,IList<string>Roles);
+         Task<AuthDto> RenewAccessTokenAsync(string token);
+         RefreshToken CreateRefreshToken(AppUser user);
 
-        public Task<bool> RevokeRefreshTokenAsync(string refreshToken);
+         Task<bool> RevokeRefreshTokenAsync(string refreshToken);
     }
 }
